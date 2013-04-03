@@ -1,11 +1,13 @@
 var app = angular.module('project', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
 
 //localhost
+/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
     'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/oauthcallback.html',
     'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
+*/
 //heroku-1
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
