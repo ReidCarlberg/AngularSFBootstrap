@@ -79,6 +79,9 @@ function sessionCallback(oauthResponse) {
 </head>
 <body>
 <h2>Salesforce Login</h2>
+
+<button id="login">Login</button>
+
 <div id="results" ></div>
 </body>
 </html>
