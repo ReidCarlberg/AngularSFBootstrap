@@ -32,13 +32,18 @@ if (window.$j === undefined) {
 }
 
 $j(document).ready(function() {
-	$j('#login').popupWindow({ 
+	$j('#login').click(function() {
+		document.location.href=getAuthorizeUrl(loginUrl, clientId, redirectUri);
+	})
+	/*
+	$j('#login').click({ 
 		windowURL: getAuthorizeUrl(loginUrl, clientId, redirectUri),
 		windowName: 'Connect',
 		centerBrowser: 0,
 		height:480, 
 		width:320
 	});
+*/
 });
 
 function getAuthorizeUrl(loginUrl, clientId, redirectUri){
