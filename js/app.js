@@ -1,4 +1,4 @@
-var app = angular.module('project', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
+//var app = angular.module('project', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
 
 //localhost- orig
 /*
@@ -9,12 +9,13 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
 });
 */
 //localhost- callbacks
+/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3JmId0TwBm.pe4XU6l1snC0odx.6npZmFeChvh6mdlG31EJpxoi48vSoGOC',
     'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/#/callback',
     'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
-
+*/
 
 //heroku-1
 /*
@@ -38,9 +39,9 @@ app.config(function ($routeProvider) {
     $routeProvider.
         when('/', {controller: HomeCtrl, templateUrl: 'partials/home.html'}).
         when('/callback', {controller: CallbackCtrl, templateUrl: 'partials/callback.html'}).
-        when('/contacts', {controller: ListCtrl, templateUrl: 'partials/contact/list.html'}).
-        when('/edit/:contactId', {controller: EditCtrl, templateUrl: 'partials/contact/detail.html'}).
-        when('/new', {controller: CreateCtrl, templateUrl: 'partials/contact/detail.html'}).
+        when('/contacts', {controller: ContactListCtrl, templateUrl: 'partials/contact/list.html'}).
+        when('/edit/:contactId', {controller: ContactEditCtrl, templateUrl: 'partials/contact/detail.html'}).
+        when('/new', {controller: ContactCreateCtrl, templateUrl: 'partials/contact/detail.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -67,14 +68,14 @@ function CallbackCtrl($scope, AngularForce) {
     AngularForce.oauthCallback(document.location.href);
 }
 
-function ListCtrl($scope, AngularForce, Contact) {
+function ContactListCtrl($scope, AngularForce, Contact) {
     Contact.query(function (data) {
         $scope.contacts = data.records;
         $scope.$apply();//Required coz sfdc uses jquery.ajax
     });
 }
 
-function CreateCtrl($scope, $location, Contact) {
+function ContactCreateCtrl($scope, $location, Contact) {
     $scope.save = function () {
         Contact.save($scope.contact, function (contact) {
             var p = contact;
@@ -85,7 +86,7 @@ function CreateCtrl($scope, $location, Contact) {
     }
 }
 
-function EditCtrl($scope, AngularForce, $location, $routeParams, Contact) {
+function ContactEditCtrl($scope, AngularForce, $location, $routeParams, Contact) {
     var self = this;
 
     AngularForce.login(function () {
