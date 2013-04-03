@@ -10,7 +10,7 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
 */
 //heroku-1
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
-    'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
+    'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW2ekPHWaGrokYkQsf5rnZQsw.pL8xHe.e1BVEin52JTot4yZDbw5SiJwM0P9',
     'oAuthCallbackURL': 'https://murmuring-sands-5964.herokuapp.com/oauthcallback.html',
     'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
 });
