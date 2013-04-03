@@ -10,12 +10,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
     <script src="app.js"></script>
     <script src="angular-force.js"></script>
-
     <script src="forcetk.js"></script>
     <script src="forcetk.ui.js"></script>
+
+
 </head>
 <body>
-<h2>Salesforce Contacts</h2>
+<h1>Salesforce Contacts</h1>
 
 <div ng-view></div>
 </body>

@@ -83,6 +83,15 @@ angular.module('AngularForce', []).
 
             ftkClientUI.login();
         };
+
+        this.oauthCallback = function (callbackString) {
+            var ftkClientUI = new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
+                function forceOAuthUI_successHandler(forcetkClient) {}, 
+                function forceOAuthUI_errorHandler() {}, 
+                SFConfig.proxyUrl);
+
+            ftkClientUI.oauthCallback(callbackString);
+        }
     });
 
 /**

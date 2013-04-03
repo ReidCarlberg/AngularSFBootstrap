@@ -1,6 +1,6 @@
 var app = angular.module('project', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
 
-//localhost
+//localhost- orig
 /*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
@@ -8,17 +8,28 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
 */
+//localhost- callbacks
+app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
+    'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3JmId0TwBm.pe4XU6l1snC0odx.6npZmFeChvh6mdlG31EJpxoi48vSoGOC',
+    'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/#/callback',
+    'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
+});
+
 //heroku-1
+/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW2ekPHWaGrokYkQsf5rnZQsw.pL8xHe.e1BVEin52JTot4yZDbw5SiJwM0P9',
     'oAuthCallbackURL': 'https://murmuring-sands-5964.herokuapp.com/oauthcallback.html',
     'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
 });
+*/
 
 
 app.config(function ($routeProvider) {
     $routeProvider.
-        when('/', {controller: ListCtrl, templateUrl: 'list.html'}).
+        when('/', {controller: HomeCtrl, templateUrl: 'home.html'}).
+        when('/callback', {controller: CallbackCtrl, templateUrl: 'callback.html'}).
+        when('/contacts', {controller: ListCtrl, templateUrl: 'list.html'}).
         when('/edit/:contactId', {controller: EditCtrl, templateUrl: 'detail.html'}).
         when('/new', {controller: CreateCtrl, templateUrl: 'detail.html'}).
         otherwise({redirectTo: '/'});
@@ -35,12 +46,23 @@ angular.module('Contact', []).factory('Contact', function (AngularForceObjectFac
     return Contact;
 });
 
+function HomeCtrl($scope, AngularForce) {
+    $scope.login = function() {
+        AngularForce.login(function() {
+            alert('hello');
+        })
+    }
+}
+
+function CallbackCtrl($scope, AngularForce) {
+    alert(document.location.href);
+    AngularForce.oauthCallback(document.location.href);
+}
+
 function ListCtrl($scope, AngularForce, Contact) {
-    AngularForce.login(function () {
-        Contact.query(function (data) {
-            $scope.contacts = data.records;
-            $scope.$apply();//Required coz sfdc uses jquery.ajax
-        });
+    Contact.query(function (data) {
+        $scope.contacts = data.records;
+        $scope.$apply();//Required coz sfdc uses jquery.ajax
     });
 }
 

@@ -49,6 +49,7 @@
         this.errorCallback = errorCallback;
 
         // Creating forcetk.Client instance
+        /* RSC added proxyUrl for PHP app */
         this.client = new forcetk.Client(consumerKey, loginURL, proxyUrl);
 
     }
@@ -128,8 +129,11 @@
         _authenticate:function _authenticate() {
             var that = this;
 
-            if (typeof window.device === 'undefined') { // Most likely app is running in a desktop browser
-                /* also show undefined when posted to Heroku as PHP app. */
+            if (typeof window.device === 'undefined') { 
+                // Most likely app is running in a desktop browser
+                /* RSC also show undefined when posted to Heroku as PHP app. */
+                /* killing the popup */
+                /*
                 console.log('_authenticate undefined');
                 var winHeight = 524,
                     winWidth = 674,
@@ -158,6 +162,9 @@
 
                     loginWindow.focus();
                 }
+                */
+                /* can we just update the location? */
+                document.location.href=this._getAuthorizeUrl();
 
             } else if (window.plugins && window.plugins.childBrowser) { // This is PhoneGap/Cordova app
                 console.log('_authenticate phoneGap');
@@ -181,6 +188,40 @@
             return this.loginURL + 'services/oauth2/authorize?'
                 + '&response_type=token&client_id=' + encodeURIComponent(this.consumerKey)
                 + '&redirect_uri=' + encodeURIComponent(this.callbackURL);
+        },
+
+        oauthCallback: function oauthCallback(loc) {
+            var oauthResponse = {},
+                fragment = loc.split("#")[2];
+
+            if (fragment) {
+                var nvps = fragment.split('&');
+                for (var nvp in nvps) {
+                    var parts = nvps[nvp].split('=');
+                    oauthResponse[parts[0]] = decodeURIComponent(parts[1]);
+                }
+            }
+
+            if (typeof oauthResponse.access_token === 'undefined') {
+
+                if (this.errorCallback)
+                    this.errorCallback({code:0, message:'Unauthorized - no OAuth response!'});
+                else
+                    console.log('ERROR: No OAuth response!')
+
+            } else {
+
+                localStorage.setItem('ftkui_refresh_token', oauthResponse.refresh_token);
+
+                this.client.setRefreshToken(oauthResponse.refresh_token);
+                this.client.setSessionToken(oauthResponse.access_token, null, oauthResponse.instance_url);
+
+                if (this.successCallback)
+                    this.successCallback(this.client);
+                else
+                    console.log('INFO: OAuth login successful!')
+
+            }
         },
 
         _sessionCallback:function _sessionCallback(loc) {
