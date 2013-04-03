@@ -9,13 +9,12 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
 });
 */
 //localhost- callbacks
-/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3JmId0TwBm.pe4XU6l1snC0odx.6npZmFeChvh6mdlG31EJpxoi48vSoGOC',
     'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/#/callback',
     'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
-*/
+
 
 //heroku-1
 /*
@@ -25,22 +24,23 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
 });
 */
-//heroku-2
+//heroku-
+/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW6ATi5jvsxiqB2K5WzRGAAsR1gBaT06RZmp0LAyUX4ExQqeH3dQPZcoa2A.s',
     'oAuthCallbackURL': 'https://murmuring-sands-5964.herokuapp.com/#/callback',
     'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
 });
-
+*/
 
 
 app.config(function ($routeProvider) {
     $routeProvider.
-        when('/', {controller: HomeCtrl, templateUrl: 'home.html'}).
-        when('/callback', {controller: CallbackCtrl, templateUrl: 'callback.html'}).
-        when('/contacts', {controller: ListCtrl, templateUrl: 'list.html'}).
-        when('/edit/:contactId', {controller: EditCtrl, templateUrl: 'detail.html'}).
-        when('/new', {controller: CreateCtrl, templateUrl: 'detail.html'}).
+        when('/', {controller: HomeCtrl, templateUrl: 'partials/home.html'}).
+        when('/callback', {controller: CallbackCtrl, templateUrl: 'partials/callback.html'}).
+        when('/contacts', {controller: ListCtrl, templateUrl: 'partials/contact/list.html'}).
+        when('/edit/:contactId', {controller: EditCtrl, templateUrl: 'partials/contact/detail.html'}).
+        when('/new', {controller: CreateCtrl, templateUrl: 'partials/contact/detail.html'}).
         otherwise({redirectTo: '/'});
 });
 
