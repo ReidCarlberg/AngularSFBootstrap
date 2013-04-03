@@ -28,6 +28,7 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW6ATi5jvsxiqB2K5WzRGAAsR1gBaT06RZmp0LAyUX4ExQqeH3dQPZcoa2A.s',
     'oAuthCallbackURL': 'https://murmuring-sands-5964.herokuapp.com/#/callback',
     'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
+});
 
 
 
