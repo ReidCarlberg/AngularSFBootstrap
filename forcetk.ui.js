@@ -129,6 +129,7 @@
             var that = this;
 
             if (typeof window.device === 'undefined') { // Most likely app is running in a desktop browser
+                /* also show undefined when posted to Heroku as PHP app. */
                 console.log('_authenticate undefined');
                 var winHeight = 524,
                     winWidth = 674,

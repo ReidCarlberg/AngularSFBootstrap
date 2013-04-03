@@ -6,6 +6,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery191/jquery.popup.js"></script>    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
     <script src="app.js"></script>
     <script src="angular-force.js"></script>
