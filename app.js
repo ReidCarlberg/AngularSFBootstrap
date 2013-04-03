@@ -9,11 +9,13 @@ app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
 });
 */
 //localhost- callbacks
+/*
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
     'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3JmId0TwBm.pe4XU6l1snC0odx.6npZmFeChvh6mdlG31EJpxoi48vSoGOC',
     'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/#/callback',
     'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
+*/
 
 //heroku-1
 /*
