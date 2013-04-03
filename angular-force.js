@@ -74,10 +74,12 @@ angular.module('AngularForce', []).
                         + forcetkClient.apiVersion;
 
                     return callback();
-                });
+                }, 
+                function forceOAuthUI_errorHandler() {}, 
+                SFConfig.proxyUrl);
 
             //Set proxyUrl BEFORE login
-            ftkClientUI.client.proxyUrl = SFConfig.proxyUrl;
+            //ftkClientUI.client.proxyUrl = SFConfig.proxyUrl;
 
             ftkClientUI.login();
         };

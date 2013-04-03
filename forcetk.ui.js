@@ -30,7 +30,7 @@
      *
      * @constructor
      */
-    forcetk.ClientUI = function (loginURL, consumerKey, callbackURL, successCallback, errorCallback) {
+    forcetk.ClientUI = function (loginURL, consumerKey, callbackURL, successCallback, errorCallback, proxyUrl) {
 
         if (typeof loginURL !== 'string') throw new TypeError('loginURL should be of type String');
         this.loginURL = loginURL;
@@ -49,7 +49,7 @@
         this.errorCallback = errorCallback;
 
         // Creating forcetk.Client instance
-        this.client = new forcetk.Client(consumerKey, loginURL);
+        this.client = new forcetk.Client(consumerKey, loginURL, proxyUrl);
 
     }
 

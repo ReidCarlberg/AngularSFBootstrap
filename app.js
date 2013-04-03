@@ -1,9 +1,18 @@
 var app = angular.module('project', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
+
+//localhost
 app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
-    'consumerKey': '3MVG9A2kN3Bn17huxQ_nFw2X9UgjpxsCn.CZgify3keA9sgl.VASp6A5HxfUFUtKH9IN7sgBH4ow7aS1WLYaa',
-    'oAuthCallbackURL': 'http://localhost:3000',
-    'proxyUrl': 'http://localhost:3000/proxy/'
+    'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
+    'oAuthCallbackURL': 'https://localhost/AngularSFBootstrap/oauthcallback.html',
+    'proxyUrl': 'https://localhost/AngularSFBootstrap/proxy.php?mode=native'
 });
+//heroku-1
+app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
+    'consumerKey': '3MVG9y6x0357HlefwuOOB3c0LW3fdpFZd6WcFrl4NaWJaAjeB3XAFjSBa5yYdYjp_.pvBWIuVJN2YUWg.Yh9s',
+    'oAuthCallbackURL': 'https://murmuring-sands-5964.herokuapp.com/oauthcallback.html',
+    'proxyUrl': 'https://murmuring-sands-5964.herokuapp.com/proxy.php?mode=native'
+});
+
 
 app.config(function ($routeProvider) {
     $routeProvider.
