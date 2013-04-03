@@ -1,7 +1,7 @@
 <!doctype html>
 <?
-if(file_exists('local.settings.php'))
-    include 'local.settings.php'; 
+if(file_exists('../local.settings.php'))
+    include '../local.settings.php'; 
 ?>
 <html ng-app="project">
 <head>
