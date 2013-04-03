@@ -61,7 +61,6 @@ function HomeCtrl($scope, AngularForce) {
 }
 
 function CallbackCtrl($scope, AngularForce) {
-    alert(document.location.href);
     AngularForce.oauthCallback(document.location.href);
 }
 
