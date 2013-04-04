@@ -52,11 +52,16 @@ function CallbackCtrl($scope, AngularForce, $location) {
     $location.path('/contacts');
 }
 
-function ContactListCtrl($scope, AngularForce, Contact) {
+function ContactListCtrl($scope, AngularForce, $location, Contact) {
     Contact.query(function (data) {
         $scope.contacts = data.records;
         $scope.$apply();//Required coz sfdc uses jquery.ajax
     });
+
+    $scope.doView = function(contactId) {
+        console.log('doView');
+        $location.path('/view/'+contactId);
+    }
 }
 
 function ContactCreateCtrl($scope, $location, Contact) {

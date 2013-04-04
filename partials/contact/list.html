@@ -1,4 +1,5 @@
 
+<div class="hidden-phone">
 <div style="float: left">
     <input type="text" ng-model="search" class="search-query" placeholder="Local Search">
 </div>
@@ -32,3 +33,11 @@
     </tr>
     </tbody>
 </table>
+
+</div>
+
+<div class="visible-phone">
+    <div ng-repeat="contact in contacts">
+    <p class="btn btn-block" ng-click="doView(contact.Id)">{{contact.FirstName}} {{contact.LastName}}</p>
+    </div>
+</div>
