@@ -25,7 +25,7 @@ if(file_exists('../local.settings.php'))
     <script src="js/forcetk.ui.js"></script>
 </head>
 <body>
-<div class="container">
+
 	<div class="navbar">
 	  <div class="navbar-inner">
 	    <a class="brand" href="#">Salesforce Contacts</a>
@@ -33,6 +33,5 @@ if(file_exists('../local.settings.php'))
 	</div>
 
 <div ng-view></div>
-</div>
 </body>
 </html>
