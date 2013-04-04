@@ -7,7 +7,7 @@ app.config(function ($routeProvider) {
         when('/contacts', {controller: ContactListCtrl, templateUrl: 'partials/contact/list.html'}).
         when('/view/:contactId', {controller: ContactViewCtrl, templateUrl: 'partials/contact/view.html'}).
         when('/edit/:contactId', {controller: ContactDetailCtrl, templateUrl: 'partials/contact/edit.html'}).
-        when('/new', {controller: ContactCreateCtrl, templateUrl: 'partials/contact/edit.html'}).
+        when('/new', {controller: ContactDetailCtrl, templateUrl: 'partials/contact/edit.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -53,15 +53,45 @@ function CallbackCtrl($scope, AngularForce, $location) {
 }
 
 function ContactListCtrl($scope, AngularForce, $location, Contact) {
+
+    $scope.searchTerm = '';
+
+    $scope.working = false;
+
     Contact.query(function (data) {
+        console.log('a');
+        $scope.working = true;
+        $scope.$apply();
         $scope.contacts = data.records;
+        $scope.working = false;
         $scope.$apply();//Required coz sfdc uses jquery.ajax
-    });
+        }, function (data) {
+            alert('Query Error');
+        }, 'Select Id, FirstName, LastName, Title, Email, Phone, Account.Name From Contact Order By LastName Limit 20 ');
+
+    $scope.isWorking = function() {
+        return $scope.working;
+    }
+    $scope.doSearch = function(searchTerm) {
+        Contact.search(function (data) {
+            console.log('1');
+            $scope.contacts = data;
+            $scope.$apply();//Required coz sfdc uses jquery.ajax
+            }, function (data) {
+                alert('Search Error');
+                console.log(data);
+            }, 'Find {' + escape($scope.searchTerm) + '*} IN ALL FIELDS RETURNING CONTACT (Id, FirstName, LastName, Title, Email, Phone, Account.Name)');
+
+    }
 
     $scope.doView = function(contactId) {
         console.log('doView');
         $location.path('/view/'+contactId);
     }
+
+    $scope.doCreate = function() {
+        $location.path('/new');   
+    }    
 }
 
 function ContactCreateCtrl($scope, $location, Contact) {
@@ -73,6 +103,8 @@ function ContactCreateCtrl($scope, $location, Contact) {
             });
         });
     }
+
+
 }
 
 function ContactViewCtrl($scope, AngularForce, $location, $routeParams, Contact) {
@@ -90,32 +122,62 @@ function ContactViewCtrl($scope, AngularForce, $location, $routeParams, Contact)
 function ContactDetailCtrl($scope, AngularForce, $location, $routeParams, Contact) {
     var self = this;
 
-    AngularForce.login(function () {
-        Contact.get({id: $routeParams.contactId}, function (contact) {
-            self.original = contact;
-            $scope.contact = new Contact(self.original);
-            $scope.$apply();//Required coz sfdc uses jquery.ajax
+    if ($routeParams.contactId) {
+        AngularForce.login(function () {
+            Contact.get({id: $routeParams.contactId}, function (contact) {
+                self.original = contact;
+                $scope.contact = new Contact(self.original);
+                $scope.$apply();//Required coz sfdc uses jquery.ajax
+            });
         });
-    });
+    } else {
+        $scope.contact = new Contact();
+        //$scope.$apply();
+    }
 
     $scope.isClean = function () {
         return angular.equals(self.original, $scope.contact);
-    };
+    }
 
     $scope.destroy = function () {
-        self.original.destroy(function () {
-            $scope.$apply(function () {
-                $location.path('/list');
-            });
-        });
-    };
+        self.original.destroy(
+            function () {
+                $scope.$apply(function () {
+                    $location.path('/contacts');
+                });
+            }, 
+            function() {
+                console.log('delete error');
+            }
+        );
+    }
 
     $scope.save = function () {
-        $scope.contact.update(function () {
-            $scope.$apply(function () {
-                $location.path('/');
-            });
+        if ($scope.contact.id) {
+            $scope.contact.update(function () {
+                $scope.$apply(function () {
+                    $location.path('/view/' + $scope.contact.Id);
+                });
 
-        });
+            });
+        } else {
+            Contact.save($scope.contact, function (contact) {
+                var p = contact;
+                $scope.$apply(function () {
+                    $location.path('/view/' + p.id);
+                });
+            });            
+        }
     };
+
+
+    $scope.doCancel = function() {
+        console.log('doCancel');
+        if ($scope.contact.id) {
+            $location.path('/view/' + $scope.contact.id);
+        } else {
+            $location.path('/contacts');
+        }
+    }
+
 }

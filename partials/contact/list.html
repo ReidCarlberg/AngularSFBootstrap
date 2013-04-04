@@ -1,7 +1,15 @@
+<div ng-show="isWorking()">
+    <p>Working</p>
+</div>
+
+<div ng-show="!isWorking()">
 
 <div class="hidden-phone">
 <div style="float: left">
-    <input type="text" ng-model="search" class="search-query" placeholder="Local Search">
+    <div style="margin-bottom: 10px;">
+        <input type="text" ng-model="searchTerm" class="search-query" placeholder="Search">
+        <p class="btn btn-primary" ng-click="doSearch(searchString)">Go</p>
+    </div>    
 </div>
 
 <div style="float: right">
@@ -15,6 +23,7 @@
     <tr>
         <th class='hidden-phone'>Id</th>
         <th>Full Name</th>
+        <th>Company</th>
         <th class='hidden-phone'>Title</th>
         <th>Phone</th>
         <th class='hidden-phone'>Email</th>
@@ -25,11 +34,10 @@
     <tr ng-repeat="contact in contacts">
         <td class='hidden-phone'>{{contact.Id}}</td>
         <td ><a href="#/view/{{contact.Id}}">{{contact.FirstName}} {{contact.LastName}}</a></td>
+        <td>{{contact.Account.Name}}</td>
         <td class='hidden-phone'>{{contact.Title}}</td>
         <td>{{contact.Phone}}</td>
         <td class='hidden-phone'>{{contact.Email}}</td>
-
-
     </tr>
     </tbody>
 </table>
@@ -37,7 +45,16 @@
 </div>
 
 <div class="visible-phone">
-    <div ng-repeat="contact in contacts">
-    <p class="btn btn-block" ng-click="doView(contact.Id)">{{contact.FirstName}} {{contact.LastName}}</p>
+
+    <div style="margin-bottom: 10px;">
+        <input type="text" ng-model="searchTerm" class="search-query" placeholder="Search">
+        <p class="btn btn-primary" ng-click="doSearch(searchString)">Go</p>
+        <p class="btn " ng-click="doCreate()">&nbsp;+&nbsp;</p>
     </div>
+
+    <div ng-repeat="contact in contacts">
+    <p class="btn btn-block" style="padding-left: 5px; text-align: left;" ng-click="doView(contact.Id)">{{contact.FirstName}} {{contact.LastName}}, {{contact.Account.Name}}</p>
+    </div>
+</div>
+
 </div>
