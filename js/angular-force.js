@@ -8,6 +8,13 @@
 angular.module('AngularForce', []).
     service('AngularForce', function (SFConfig) {
 
+        this.authenticated = function() {
+            if (SFConfig.client) {
+                return true;
+            }
+            return false;
+        }
+
         this.login = function (callback) {
             if (SFConfig.client) { //already logged in
                 return callback && callback();
@@ -98,6 +105,24 @@ angular.module('AngularForce', []).
 
             ftkClientUI.oauthCallback(callbackString);
         }
+
+        this.logout = function(callbackString) {
+            if (SFConfig.client) {
+                var ftkClientUI = new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
+                    function forceOAuthUI_successHandler(forcetkClient) {
+                        console.log('OAuth callback success!');
+                        SFConfig.client = forcetkClient;
+                        SFConfig.client.serviceURL = forcetkClient.instanceUrl
+                            + '/services/data/'
+                            + forcetkClient.apiVersion;                    
+                    }, 
+                    function forceOAuthUI_errorHandler() {}, 
+                    SFConfig.proxyUrl);
+
+                ftkClientUI.client = SFConfig.client;
+                ftkClientUI.logout(callbackString);
+            }
+        }
     });
 
 /**
@@ -120,6 +145,10 @@ angular.module('AngularForceObjectFactory', []).factory('AngularForceObjectFacto
         var type = params.type;
         var fields = params.fields;
         var where = params.where;
+        var limit = params.limit;
+        if (!limit) {
+            limit = 25;
+        }
 
         /**
          * AngularForceObject acts like a super-class for actual SF Objects. It provides wrapper to forcetk ajax apis
@@ -152,7 +181,7 @@ angular.module('AngularForceObjectFactory', []).factory('AngularForceObjectFacto
         };
 
         AngularForceObject.query = function (successCB, failureCB) {
-            var soql = 'SELECT ' + fields.join(',') + ' FROM ' + type + ' ' + where;
+            var soql = 'SELECT ' + fields.join(',') + ' FROM ' + type + ' ' + where + ' LIMIT ' + limit;
             return SFConfig.client.query(soql, successCB, failureCB);
         };
 

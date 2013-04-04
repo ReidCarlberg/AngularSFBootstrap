@@ -2,6 +2,7 @@
 app.config(function ($routeProvider) {
     $routeProvider.
         when('/', {controller: HomeCtrl, templateUrl: 'partials/home.html'}).
+        when('/login', {controller: LoginCtrl, templateUrl: 'partials/login.html'}).
         when('/callback', {controller: CallbackCtrl, templateUrl: 'partials/callback.html'}).
         when('/contacts', {controller: ContactListCtrl, templateUrl: 'partials/contact/list.html'}).
         when('/view/:contactId', {controller: ContactViewCtrl, templateUrl: 'partials/contact/view.html'}).
@@ -17,11 +18,26 @@ app.config(function ($routeProvider) {
  *  PS: This module is injected into ListCtrl, EditCtrl etc. controllers to further consume the object.
  */
 angular.module('Contact', []).factory('Contact', function (AngularForceObjectFactory) {
-    var Contact = AngularForceObjectFactory({type: 'Contact', fields: ['FirstName', 'LastName', 'Title','Phone','Email', 'Id'], where: ''});
+    var Contact = AngularForceObjectFactory({type: 'Contact', fields: ['FirstName', 'LastName', 'Title','Phone','Email', 'Id'], where: '', limit: 10});
     return Contact;
 });
 
-function HomeCtrl($scope, AngularForce) {
+function HomeCtrl($scope, AngularForce, $location) {
+    $scope.authenticated = AngularForce.authenticated();
+
+    if (!$scope.authenticated) {
+        $location.path('/login');
+    }
+
+    $scope.logout = function() {
+        console.log('in logout');
+        AngularForce.logout();
+        $location.path('/login');
+    }
+
+}
+
+function LoginCtrl($scope, AngularForce) {
     $scope.login = function() {
         AngularForce.login(function() {
             alert('hello');
@@ -29,8 +45,11 @@ function HomeCtrl($scope, AngularForce) {
     }
 }
 
-function CallbackCtrl($scope, AngularForce) {
+
+function CallbackCtrl($scope, AngularForce, $location) {
     AngularForce.oauthCallback(document.location.href);
+
+    $location.path('/contacts');
 }
 
 function ContactListCtrl($scope, AngularForce, Contact) {
@@ -45,7 +64,7 @@ function ContactCreateCtrl($scope, $location, Contact) {
         Contact.save($scope.contact, function (contact) {
             var p = contact;
             $scope.$apply(function () {
-                $location.path('/edit/' + p.id);
+                $location.path('/view/' + p.id);
             });
         });
     }
