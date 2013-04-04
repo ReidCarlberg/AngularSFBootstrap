@@ -29,9 +29,6 @@ if(file_exists('../local.settings.php'))
 	<div class="navbar">
 	  <div class="navbar-inner">
 	    <a class="brand" href="#">Salesforce Contacts</a>
-	    <ul class="nav btn pull-right" ng-show="SFCongig.client">
-	    	<li >Logout</li>
-	   	</ul>
 	  </div>
 	</div>
 
