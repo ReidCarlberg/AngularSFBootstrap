@@ -1,4 +1,13 @@
-<input type="text" ng-model="search" class="search-query" placeholder="Local Search">
+
+<div style="float: left">
+    <input type="text" ng-model="search" class="search-query" placeholder="Local Search">
+</div>
+
+<div style="float: right">
+    <a href="#/new" class="btn btn-primary">New</a>    
+</div>
+
+<div style="float: clear;"></div>
 
 <table width="80%" class="table">
     <thead>
@@ -8,24 +17,17 @@
         <th class='hidden-phone'>Title</th>
         <th>Phone</th>
         <th class='hidden-phone'>Email</th>
-        <th>Edit</th>
-        <th>
-            <a href="#/new" class="btn btn-primary">New</a>
-        </th>
     </tr>
     </thead>
     <tbody>
 
     <tr ng-repeat="contact in contacts">
         <td class='hidden-phone'>{{contact.Id}}</td>
-        <td >{{contact.FirstName}} {{contact.LastName}}</td>
+        <td ><a href="#/view/{{contact.Id}}">{{contact.FirstName}} {{contact.LastName}}</a></td>
         <td class='hidden-phone'>{{contact.Title}}</td>
         <td>{{contact.Phone}}</td>
         <td class='hidden-phone'>{{contact.Email}}</td>
-        <td>
-            <a href="#/edit/{{contact.Id}}"><i class="icon-pencil"></i></a>
-        </td>
-        <td></td>
+
 
     </tr>
     </tbody>

@@ -4,8 +4,9 @@ app.config(function ($routeProvider) {
         when('/', {controller: HomeCtrl, templateUrl: 'partials/home.html'}).
         when('/callback', {controller: CallbackCtrl, templateUrl: 'partials/callback.html'}).
         when('/contacts', {controller: ContactListCtrl, templateUrl: 'partials/contact/list.html'}).
-        when('/edit/:contactId', {controller: ContactEditCtrl, templateUrl: 'partials/contact/detail.html'}).
-        when('/new', {controller: ContactCreateCtrl, templateUrl: 'partials/contact/detail.html'}).
+        when('/view/:contactId', {controller: ContactViewCtrl, templateUrl: 'partials/contact/view.html'}).
+        when('/edit/:contactId', {controller: ContactDetailCtrl, templateUrl: 'partials/contact/edit.html'}).
+        when('/new', {controller: ContactCreateCtrl, templateUrl: 'partials/contact/edit.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -50,7 +51,19 @@ function ContactCreateCtrl($scope, $location, Contact) {
     }
 }
 
-function ContactEditCtrl($scope, AngularForce, $location, $routeParams, Contact) {
+function ContactViewCtrl($scope, AngularForce, $location, $routeParams, Contact) {
+
+    AngularForce.login(function () {
+        Contact.get({id: $routeParams.contactId}, function (contact) {
+            self.original = contact;
+            $scope.contact = new Contact(self.original);
+            $scope.$apply();//Required coz sfdc uses jquery.ajax
+        });
+    });
+
+}
+
+function ContactDetailCtrl($scope, AngularForce, $location, $routeParams, Contact) {
     var self = this;
 
     AngularForce.login(function () {

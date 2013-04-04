@@ -13,10 +13,10 @@ if(file_exists('../local.settings.php'))
 		var app = angular.module('AngularSFDemo', ['AngularForce', 'AngularForceObjectFactory', 'Contact']);
 
 		app.constant('SFConfig', {'sfLoginURL': 'https://login.salesforce.com/',
-	    'consumerKey': '<?= $_ENV['client_id'] ?>',
-	    'oAuthCallbackURL': '<?= $_ENV['redirect_uri'] ?>',
-	    'proxyUrl': '<?= $_ENV['proxy_url'] ?>'
-		});    	
+		    'consumerKey': '<?= $_ENV['client_id'] ?>',
+		    'oAuthCallbackURL': '<?= $_ENV['redirect_uri'] ?>',
+		    'proxyUrl': '<?= $_ENV['proxy_url'] ?>'
+			});    	
 
     </script>
     <script src="js/app.js"></script>
@@ -25,8 +25,17 @@ if(file_exists('../local.settings.php'))
     <script src="js/forcetk.ui.js"></script>
 </head>
 <body>
-<h1>Salesforce Contacts</h1>
+<div class="container">
+	<div class="navbar">
+	  <div class="navbar-inner">
+	    <a class="brand" href="#">Salesforce Contacts</a>
+	    <ul class="nav btn pull-right" ng-show="SFCongig.client">
+	    	<li >Logout</li>
+	   	</ul>
+	  </div>
+	</div>
 
 <div ng-view></div>
+</div>
 </body>
 </html>
