@@ -204,7 +204,7 @@ if (forcetk.Client === undefined) {
         request.responseType = "arraybuffer";
         
         request.setRequestHeader(that.authzHeader, "OAuth " + that.sessionId);
-        request.setRequestHeader('X-User-Agent', 'salesforce-toolkit-rest-javascript-angularjs/' + that.apiVersion);
+        request.setRequestHeader('X-User-Agent', 'salesforce-toolkit-rest-javascript-angularjs-php/' + that.apiVersion);
         if (this.proxyUrl !== null) {
             request.setRequestHeader('SalesforceProxy-Endpoint', url);
         }

@@ -1,19 +1,26 @@
 /**
- * AngularForce Module helps with logging into Salesforce. It internally depends on Cordova(Phonegap apps) and
+ * AngularForce library provides glue b/w Angular.js and Saleforce's forcetk libraries to help easily build
+ * AngularJS based Salesforce apps.
+ *
+ * It contains the following two Angular Modules.
+ * 1. AngularForce - Helps with authentication with Salesforce
+ * 2. AngularForceObjectFactory - Creates & returns different kind of AngularForceObject class based on the params.
+ *
+ */
+
+
+/**
+ * AngularForce Module helps with authentication with Salesforce. It internally depends on Cordova(Phonegap apps) and
  * forcetk.ui(web apps) to do so.
  *
  * @param SFConfig An AngularJS object that is used to store forcetk.client.
- * If
  */
 angular.module('AngularForce', []).
     service('AngularForce', function (SFConfig) {
 
-        this.authenticated = function() {
-            if (SFConfig.client) {
-                return true;
-            }
-            return false;
-        }
+        this.authenticated = function () {
+          return SFConfig.client ? true : false;
+        };
 
         this.login = function (callback) {
             if (SFConfig.client) { //already logged in
@@ -24,6 +31,7 @@ angular.module('AngularForce', []).
                 return this.setCordovaLoginCred(callback);
             } else if (typeof getSFSessionId === 'function') { //visualforce
                 //??
+                return null;
             } else { //standalone / heroku / localhost
                 return this.loginWeb(callback);
             }
@@ -72,56 +80,41 @@ angular.module('AngularForce', []).
             if (SFConfig.client) { //already loggedin
                 return callback();
             }
-            var ftkClientUI = new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
-                function forceOAuthUI_successHandler(forcetkClient) { // successCallback
-                    console.log('OAuth success!');
-                    SFConfig.client = forcetkClient;
-                    SFConfig.client.serviceURL = forcetkClient.instanceUrl
-                        + '/services/data/'
-                        + forcetkClient.apiVersion;
-
-                    return callback();
-                }, 
-                function forceOAuthUI_errorHandler() {}, 
-                SFConfig.proxyUrl);
-
-            //Set proxyUrl BEFORE login
-            //ftkClientUI.client.proxyUrl = SFConfig.proxyUrl;
-
+            var ftkClientUI = getForceTKClientUI();
             ftkClientUI.login();
         };
 
         this.oauthCallback = function (callbackString) {
-            var ftkClientUI = new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
+            var ftkClientUI = getForceTKClientUI();
+            ftkClientUI.oauthCallback(callbackString);
+        };
+
+        this.logout = function (callbackString) {
+            if (SFConfig.client) {
+                var ftkClientUI = getForceTKClientUI();
+                ftkClientUI.client = SFConfig.client;
+                ftkClientUI.logout(callbackString);
+            }
+        };
+
+        /**
+         * Creates a forcetk.clientUI object using information from SFConfig. Please set SFConfig information
+         * in init.js (or via environment variables).
+         *
+         * @returns {forcetk.ClientUI}
+         */
+        function getForceTKClientUI() {
+            return new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
                 function forceOAuthUI_successHandler(forcetkClient) {
                     console.log('OAuth callback success!');
                     SFConfig.client = forcetkClient;
                     SFConfig.client.serviceURL = forcetkClient.instanceUrl
                         + '/services/data/'
-                        + forcetkClient.apiVersion;                    
-                }, 
-                function forceOAuthUI_errorHandler() {}, 
+                        + forcetkClient.apiVersion;
+                },
+                function forceOAuthUI_errorHandler() {
+                },
                 SFConfig.proxyUrl);
-
-            ftkClientUI.oauthCallback(callbackString);
-        }
-
-        this.logout = function(callbackString) {
-            if (SFConfig.client) {
-                var ftkClientUI = new forcetk.ClientUI(SFConfig.sfLoginURL, SFConfig.consumerKey, SFConfig.oAuthCallbackURL,
-                    function forceOAuthUI_successHandler(forcetkClient) {
-                        console.log('OAuth callback success!');
-                        SFConfig.client = forcetkClient;
-                        SFConfig.client.serviceURL = forcetkClient.instanceUrl
-                            + '/services/data/'
-                            + forcetkClient.apiVersion;                    
-                    }, 
-                    function forceOAuthUI_errorHandler() {}, 
-                    SFConfig.proxyUrl);
-
-                ftkClientUI.client = SFConfig.client;
-                ftkClientUI.logout(callbackString);
-            }
         }
     });
 
@@ -185,14 +178,11 @@ angular.module('AngularForceObjectFactory', []).factory('AngularForceObjectFacto
             if (!soql) {
                 soql = 'SELECT ' + fields.join(',') + ' FROM ' + type + ' ' + where + ' LIMIT ' + limit;
             }
-            console.log('soql');
             return SFConfig.client.query(soql, successCB, failureCB);
         };
 
         /*RSC And who doesn't love SOSL*/
         AngularForceObject.search = function (successCB, failureCB, sosl) {
-            console.log('1');
-            console.log(sosl);
             return SFConfig.client.search(sosl, successCB, failureCB);
         };
 
@@ -218,7 +208,6 @@ angular.module('AngularForceObjectFactory', []).factory('AngularForceObjectFacto
 
         AngularForceObject.update = function (obj, successCB, failureCB) {
             var data = AngularForceObject.getChangedData(obj);
-            debugger;
             return SFConfig.client.update(type, obj.Id, data, function (data) {
                 if (data && !angular.isArray(data)) {
                     return successCB(new AngularForceObject(data))
@@ -228,10 +217,6 @@ angular.module('AngularForceObjectFactory', []).factory('AngularForceObjectFacto
         };
 
         AngularForceObject.remove = function (obj, successCB, failureCB) {
-            console.log('in delete');
-            console.log(obj);
-            console.log(type);
-
             return SFConfig.client.del(type, obj.Id, successCB, failureCB);
         };
 
